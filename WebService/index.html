@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+      <title>Web Service</title>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+      <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+   </head>
+   <body>
+      <nav role="navigation" class="black">
+         <div class="nav-wrapper container">
+         <a href="#" class="brand-logo center">Web Service</a>
+            <ul id="main-nav" class="hide-on-med-and-down">
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="black-text material-icons">menu</i></a>
+         </div>
+      </nav>
+      <ul class="side-nav" id="nav-mobile">
+      </ul>
+
+	<div class="container">
+		<div class="row">
+			<h1>Enter Three Numbers</h1>
+			<P>This will take three numbers and add them together</P>
+		</div>	
+		</div>
+		<div class="container">
+		<div class="row">
+			<label for="Num1" class="col-md-3">Number: 1</label>
+			<input type="number" name="Num1" id="Num1" class="col-md-9" />
+		</div>
+		<div class="row">
+			<label for="Num2" class="col-md-3">Number: 2</label>
+			<input type="number" name="Num2" id="Num2" class="col-md-9" />
+		</div>
+		<div class="row">
+			<label for="Num3" class="col-md-3">Number: 3</label>
+			<input type="number" name="Num3" id="Num3" class="col-md-9" />
+		</div>
+		<button type="submit" class="black btn-large waves-effect waves-light" name="submit" id="submit" onclick="getData();">Total Numbers</button>
+	</div>
+	<div class="container">
+		<h2>Results</h2>
+		<h5 id="Data"></h5>
+		<button class="black btn-large waves-effect waves-light" onclick="Reset()">Reset</button>
+	</div>
+	<script>
+		function getData(){
+			var number1 = document.getElementById("Num1").value;
+			var number2 = document.getElementById("Num2").value;
+			var number3 = document.getElementById("Num3").value;
+
+			$.ajaxSetup({ cache: false});
+
+			var data = 'Num1=' + number1 + '&Num2=' + number2 + '&Num3=' + number3;
+			if(number1 == "" || number2 == "" || number3 == ""){
+				document.getElementById('Data').innerText = "Please check your entries then try again";
+			}else{
+				$.post("https://localhost:44331/myWebservice.asmx/NumSum", 
+					data).done(
+					function (data, textStatus, jqXHR){
+						xmlDoc = data.getElementsByTagName("double")
+						[0].childNodes[0].nodeValue;
+						result = Math.round(xmlDoc * 10);
+						finalResult = result/10;
+						document.getElementById('Data').innerText = "The total values is: " + finalResult;
+					}).fail(function (data, textStatus, jqXHR)
+					{document.getElementById('Data').innerText = "There Is An Error, The Request Failed!";}
+					);
+			}
+		}
+	</script>
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script src="js/materialize.js"></script>
+      <script src="js/init.js"></script>
+	   <script src="js/Reset.js"></script>
+   </body>
+</html>
